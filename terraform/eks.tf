@@ -38,6 +38,8 @@ module "eks" {
 
       instance_types = ["t3.large"]
       capacity_type  = "SPOT"
+      resolve_conflicts_on_create = "OVERWRITE"
+      resolve_conflicts_on_update = "OVERWRITE"
     }
   }
 
