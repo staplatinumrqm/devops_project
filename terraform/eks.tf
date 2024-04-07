@@ -58,7 +58,7 @@ module "eks" {
 
   aws_auth_roles = [
     {
-      rolearn  = "arn:aws:iam::594182463744:role/role1"
+      rolearn  = "arn:aws:iam::058572034132:role/role1"
       username = "role1"
       groups   = ["system:masters"]
     },
@@ -66,19 +66,19 @@ module "eks" {
 
   aws_auth_users = [
     {
-      userarn  = "arn:aws:iam::594182463744:user/user1"
+      userarn  = "arn:aws:iam::058572034132:user/user1"
       username = "user1"
       groups   = ["system:masters"]
     },
     {
-      userarn  = "arn:aws:iam::594182463744:user/user2"
+      userarn  = "arn:aws:iam::058572034132:user/user2"
       username = "user2"
       groups   = ["system:masters"]
     },
   ]
 
   aws_auth_accounts = [
-    "594182463744",
+    "058572034132",
     "888888888888",
   ]
 
