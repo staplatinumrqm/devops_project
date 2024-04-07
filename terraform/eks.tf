@@ -1,9 +1,9 @@
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
- version = "~> 19.0"
+  version = "~> 20.0"
 
   cluster_name    = "my-cluster"
-  cluster_version = "1.27"
+  cluster_version = "1.29"
 
   cluster_endpoint_public_access  = true
 
@@ -19,70 +19,47 @@ module "eks" {
     }
   }
 
-  vpc_id                   = module.vpc.vpc_id
-  subnet_ids               = module.vpc.private_subnets
-  control_plane_subnet_ids = module.vpc.public_subnets
+  vpc_id                   = "vpc-1234556abcdef"
+  subnet_ids               = ["subnet-abcde012", "subnet-bcde012a", "subnet-fghi345a"]
+  control_plane_subnet_ids = ["subnet-xyzde987", "subnet-slkjf456", "subnet-qeiru789"]
 
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
-    instance_types = ["m6i.large", "m5.large", "m5n.large", "t3.large"]
+    instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
   }
 
   eks_managed_node_groups = {
-
-    green = {
-      use_custom_launch_template = false
+    example = {
       min_size     = 1
       max_size     = 10
       desired_size = 1
 
       instance_types = ["t3.large"]
       capacity_type  = "SPOT"
-      resolve_conflicts_on_create = "OVERWRITE"
-      resolve_conflicts_on_update = "OVERWRITE"
     }
   }
 
-  # Fargate Profile(s)
-  fargate_profiles = {
-    default = {
-      name = "default"
-      selectors = [
-        {
-          namespace = "default"
+  # Cluster access entry
+  # To add the current caller identity as an administrator
+  enable_cluster_creator_admin_permissions = true
+
+  access_entries = {
+    # One access entry with a policy associated
+    example = {
+      kubernetes_groups = []
+      principal_arn     = "arn:aws:iam::058572034132:role/something"
+
+      policy_associations = {
+        example = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
+          access_scope = {
+            namespaces = ["default"]
+            type       = "namespace"
+          }
         }
-      ]
+      }
     }
   }
-
-  # aws-auth configmap
-  manage_aws_auth_configmap = false
-
-  aws_auth_roles = [
-    {
-      rolearn  = "arn:aws:iam::058572034132:role/role1"
-      username = "role1"
-      groups   = ["system:masters"]
-    },
-  ]
-
-  aws_auth_users = [
-    {
-      userarn  = "arn:aws:iam::058572034132:user/user1"
-      username = "user1"
-      groups   = ["system:masters"]
-    },
-    {
-      userarn  = "arn:aws:iam::058572034132:user/user2"
-      username = "user2"
-      groups   = ["system:masters"]
-    },
-  ]
-
-  aws_auth_accounts = [
-    "058572034132",
-    "888888888888",
-  ]
 
   tags = {
     Environment = "dev"
