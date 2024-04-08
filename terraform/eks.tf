@@ -1,4 +1,4 @@
-mmodule  "vpc" {
+module  "vpc" {
   source = "./vpc.tf"
 
 module "eks" {
