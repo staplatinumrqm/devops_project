@@ -1,5 +1,5 @@
 module  "vpc_local" {
-  source = "./vpc.tf"
+  source = "vpc.tf"
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
