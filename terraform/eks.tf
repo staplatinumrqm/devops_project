@@ -1,5 +1,5 @@
 module  "vpc_local" {
-  source = "vpc.tf"
+  source = "./vpc.tf"
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
@@ -22,9 +22,9 @@ module "eks" {
     }
   }
 
-  vpc_id                   = module.vpc_local.vpc_id
-  subnet_ids               = module.vpc_local.private_subnet_ids
-  control_plane_subnet_ids = module.vpc_local.public_subnet_ids
+  vpc_id                   = module.vpc.vpc_id
+  subnet_ids               = module.vpc.private_subnets
+  control_plane_subnet_ids = module.vpc.public_subnets
 
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
