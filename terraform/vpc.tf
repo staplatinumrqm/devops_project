@@ -16,15 +16,3 @@ module "vpc" {
     Environment = "dev"
   }
 }
-
-output "vpc_id" {
-  value = vpc.vpc_id
-}
-
-output "private_subnet_ids" {
-  value = vpc.private_subnets
-}
-
-output "public_subnet_ids" {
-  value = vpc.public_subnets
-}
